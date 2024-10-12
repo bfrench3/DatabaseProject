@@ -28,15 +28,28 @@ function LoginButtons() {
 
 
 
-/* TODO: FIGURE OUT A UNIVERSAL ID COUNTER TO ASSOCIATE WITH AN ACCOUNT */
+/* TODO: FIGURE OUT A UNIVERSAL ID COUNTER TO ASSOCIATE WITH AN ACCOUNT,
+MAKE PRODUCTS LANDING PAGE POPULATED
+*/
 
 
 
 
 
-
+function Products(){
+  return(
+    <div>
+      
+      <h1>Product landing page</h1>
+    </div>
+  );
+}
 // placeholder, this will become the form to create an account
 function CreateAccount() {
+  const navigate = useNavigate();
+  function handleClickHome(){
+    navigate("/products");
+  }
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -47,6 +60,7 @@ function CreateAccount() {
     console.log('Password: ', password);
     console.log('Email: ', email);
     console.log('address: ', address);
+    navigate("/products");
   };
 
   return (
@@ -84,7 +98,7 @@ function CreateAccount() {
               onChange={(e) => setPassword(e.target.value)} />
           </label>
         </div>
-        <input type="submit" id="submitButton" value = "create"/>
+        <input type="submit" id="submitButton" value = "create" onClick={handleClickHome} />
       </form>
       
     </div>
@@ -92,14 +106,18 @@ function CreateAccount() {
 }
 
 function Login(){
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Username:', username);
     console.log('Password:', password);
+    navigate("/products");
   };
+  function handleClickHome(){
+    navigate("/products");
+  }
   return (
     <div>
       <h2 id="title">Login</h2>
@@ -121,8 +139,9 @@ function Login(){
             />
           </label>
         </div>
-        <input type="submit" id="submitButton" value = "Login"/>
+        <input type="submit" id="submitButton" value = "Login" onClick={handleClickHome}/>
       </form>
+   
     </div>
   );
 }
@@ -145,6 +164,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/products" element={<Products />} />
       </Routes>
     </Router>
   );
