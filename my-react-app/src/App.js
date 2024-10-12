@@ -24,22 +24,69 @@ function LoginButtons() {
   );
 }
 
+
+
+
+
+/* TODO: FIGURE OUT A UNIVERSAL ID COUNTER TO ASSOCIATE WITH AN ACCOUNT */
+
+
+
+
+
+
 // placeholder, this will become the form to create an account
 function CreateAccount() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Username: ', username);
+    console.log('Password: ', password);
+    console.log('Email: ', email);
+    console.log('address: ', address);
+  };
+
   return (
     <div>
       <h2 id = "title">Create Your Account</h2>
-      <form>
-        <label>Enter your email: 
-          <input type="text" />
-        </label>
-        <label>Shipping Address: 
-          <input type = "text" />
-        </label>
-        <label> Enter a password: 
-          <input type = "text" />
-        </label>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className = "form-label">Enter your email: 
+            <input type="text" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}/>
+          </label>
+        </div>
+        <div className="form-group">
+          <label className = "form-label">Shipping Address: 
+            <input 
+              type = "text"
+              value ={address}
+              onChange={(e) => setAddress(e.target.value)} />
+          </label>
+        </div>
+        <div className="form-group">
+          <label className = "form-label">Enter a username:
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)} />
+          </label>
+        </div>
+        <div className="form-group">
+          <label className = "form-label"> Enter a password: 
+            <input 
+              type = "text" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} />
+          </label>
+        </div>
+        <input type="submit" id="submitButton" value = "create"/>
       </form>
+      
     </div>
   );
 }
