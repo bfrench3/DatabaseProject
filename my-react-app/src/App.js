@@ -1,6 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 //second import uses navigation to change pages
+import React, { useState } from 'react';
+//third import for extracting data
 
 //function for both buttons, either create or login
 function LoginButtons() {
@@ -26,14 +28,54 @@ function LoginButtons() {
 function CreateAccount() {
   return (
     <div>
-      <h2>Create Your Account</h2>
+      <h2 id = "title">Create Your Account</h2>
+      <form>
+        <label>Enter your email: 
+          <input type="text" />
+        </label>
+        <label>Shipping Address: 
+          <input type = "text" />
+        </label>
+        <label> Enter a password: 
+          <input type = "text" />
+        </label>
+      </form>
     </div>
   );
 }
+
 function Login(){
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Username:', username);
+    console.log('Password:', password);
+  };
   return (
     <div>
-      <h2>Login</h2>
+      <h2 id="title">Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className="form-label">Username: 
+            <input 
+              type="text" 
+              value={username} 
+              onChange={(e) => setUsername(e.target.value)} />
+          </label>
+        </div>
+        <div className="form-group">
+          <label className="form-label">Password: 
+            <input 
+              type = "text"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} 
+            />
+          </label>
+        </div>
+        <input type="submit" id="submitButton" value = "Login"/>
+      </form>
     </div>
   );
 }
