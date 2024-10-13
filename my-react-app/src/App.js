@@ -39,17 +39,71 @@ MAKE PRODUCTS LANDING PAGE POPULATED
 function Products(){
   return(
     <div>
-      
-      <h1>Product landing page</h1>
+      <h1 id="title">Impact Strength Club Merchandise Site</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Shirts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>shirt1</td>
+            <td>shirt2</td>
+            <td>shirt3</td>
+            <td>shirt4</td>
+          </tr>
+        </tbody>
+      </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Sweatshirts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>sweatshirt1</td>
+            <td>sweatshirt2</td>
+            <td>sweatshirt3</td>
+            <td>sweatshirt4</td>
+          </tr>
+        </tbody>
+      </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Pants</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>sweats1</td>
+            <td>sweats2</td>
+            <td>sweats3</td>
+          </tr>
+        </tbody>
+      </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Hats</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>hat1</td>
+            <td>har2</td>
+            <td>hat3</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }
 // placeholder, this will become the form to create an account
 function CreateAccount() {
-  const navigate = useNavigate();
-  function handleClickHome(){
-    navigate("/products");
-  }
+  const navigate = useNavigate(); //invoke library
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -98,9 +152,8 @@ function CreateAccount() {
               onChange={(e) => setPassword(e.target.value)} />
           </label>
         </div>
-        <input type="submit" id="submitButton" value = "create" onClick={handleClickHome} />
+        <input type="submit" id="submitButton" value = "create" />
       </form>
-      
     </div>
   );
 }
@@ -115,9 +168,7 @@ function Login(){
     console.log('Password:', password);
     navigate("/products");
   };
-  function handleClickHome(){
-    navigate("/products");
-  }
+  
   return (
     <div>
       <h2 id="title">Login</h2>
@@ -139,7 +190,7 @@ function Login(){
             />
           </label>
         </div>
-        <input type="submit" id="submitButton" value = "Login" onClick={handleClickHome}/>
+        <input type="submit" id="submitButton" value = "Login"/>
       </form>
    
     </div>
@@ -150,7 +201,7 @@ function Login(){
 function Home() {
   return (
     <div>
-      <h1 id="title">Impact Fitness Merchandise Site</h1>
+      <h1 id="title">Impact Strength Club Merchandise Site</h1>
       <LoginButtons />
     </div>
   );
