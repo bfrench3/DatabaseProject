@@ -1,4 +1,8 @@
 import './App.css';
+import shirt1 from './shirt.jpg';
+import sweatshirt from './sweatshirt.jpg'
+import sweats from './sweats.jpg'
+import hat from './hat.webp'
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 //second import uses navigation to change pages
 import React, { useState } from 'react';
@@ -29,7 +33,7 @@ function LoginButtons() {
 
 
 /* TODO: FIGURE OUT A UNIVERSAL ID COUNTER TO ASSOCIATE WITH AN ACCOUNT,
-MAKE PRODUCTS LANDING PAGE POPULATED
+MAKE PRODUCTS LANDING PAGE POPULATED, MOCK DATA IS, FILL W PICTURES, IMAGES, PRICES
 */
 
 
@@ -48,10 +52,18 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>shirt1</td>
-            <td>shirt2</td>
-            <td>shirt3</td>
-            <td>shirt4</td>
+            <td>
+              <img src={shirt1} alt="Shirt 1" width="100" />
+              <input type="text" placeholder="Shirt 1" />
+            </td>
+            <td>
+              <img src={shirt1} alt="Shirt 2" width="100" />
+              <input type="text" placeholder="Shirt 2" />
+            </td>
+            <td>
+              <img src={shirt1} alt="Shirt 3" width="100" />
+              <input type="text" placeholder="Shirt 3" />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -63,10 +75,17 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>sweatshirt1</td>
-            <td>sweatshirt2</td>
-            <td>sweatshirt3</td>
-            <td>sweatshirt4</td>
+            <td>
+              <img src={sweatshirt} alt="sweatshirt" width="100"/>
+              <input type="text" placeholder="sweatshirt 1" />
+            </td>
+            <td>
+              <img src={sweatshirt} alt="sweatshirt" width="100"/>
+              <input type="text" placeholder="sweatshirt 2" /></td>
+            <td>
+              <img src={sweatshirt} alt="sweatshirt" width="100"/>
+              <input type="text" placeholder="sweatshirt 3" />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -78,9 +97,16 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>sweats1</td>
-            <td>sweats2</td>
-            <td>sweats3</td>
+            <td>
+              <img src={sweats} alt="sweats" width="100"/>
+              <input type="text" placeholder="sweats 1" />
+            </td>
+            <td>
+              <img src={sweats} alt="sweats" width="100"/>
+              <input type="text" placeholder="sweats 2" /></td>
+            <td>
+              <img src={sweats} alt="sweats" width="100"/>
+              <input type="text" placeholder="sweats 3" /></td>
           </tr>
         </tbody>
       </table>
@@ -92,9 +118,15 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>hat1</td>
-            <td>har2</td>
-            <td>hat3</td>
+            <td>
+              <img src={hat} alt="hat" width="100"/>
+              <input type="text" placeholder="hat 1" /></td>
+            <td>
+              <img src={hat} alt="hat" width="100"/>
+              <input type="text" placeholder="hat 2" /></td>
+            <td>
+              <img src={hat} alt="hat" width="100"/>
+              <input type="text" placeholder="hat 3" /></td>
           </tr>
         </tbody>
       </table>
