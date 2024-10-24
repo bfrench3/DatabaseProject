@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-route
 //second import uses navigation to change pages
 import React, { useState } from 'react';
 //third import for extracting data
+import { useLocation } from 'react-router-dom';
 
 //function for both buttons, either create or login
 function LoginButtons() {
@@ -32,15 +33,30 @@ function LoginButtons() {
 
 
 
-/* TODO: FIGURE OUT A UNIVERSAL ID COUNTER TO ASSOCIATE WITH AN ACCOUNT,
-MAKE PRODUCTS LANDING PAGE POPULATED, MOCK DATA IS, FILL W PICTURES, IMAGES, PRICES
-*/
+/* ADD A CART PAGE */ 
 
+function Cart(){
+  const location = useLocation();
+  const { altText } = location.state || {};
 
+  return (
+    <div>
+      <h1>Cart</h1>
+      {altText ? <p>Item: {altText}</p> : <p>No item selected</p>}
+    </div>
+  );
+}
 
 
 
 function Products(){
+  const navigate = useNavigate();
+
+  const handleClick = (alt) => {
+
+    // Pass the alt text as state when navigating
+    navigate("/cart", { state: { altText: alt } });
+  };
   return(
     <div>
       <h1 id="title">Impact Strength Club Merchandise Site</h1>
@@ -52,17 +68,18 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>
+            <td id = "item" onClick={() => handleClick("Shirt 1")}>
               <img src={shirt1} alt="Shirt 1" width="100" />
-              <input type="text" placeholder="Shirt 1" />
+              <textarea value={`Shirt 1\n19.99`} readOnly />
+
             </td>
-            <td>
+            <td id = "item" onClick={() => handleClick("Shirt 2")}>
               <img src={shirt1} alt="Shirt 2" width="100" />
-              <input type="text" placeholder="Shirt 2" />
+              <textarea value={`Shirt 2\n24.99`} readOnly />
             </td>
-            <td>
+            <td id = "item" onClick={() => handleClick("Shirt 3")}>
               <img src={shirt1} alt="Shirt 3" width="100" />
-              <input type="text" placeholder="Shirt 3" />
+              <textarea value={`Shirt 3\n29.99`} readOnly />
             </td>
           </tr>
         </tbody>
@@ -75,16 +92,17 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>
+            <td id = "item" onClick={() => handleClick("sweatshirt 1")}>
               <img src={sweatshirt} alt="sweatshirt" width="100"/>
-              <input type="text" placeholder="sweatshirt 1" />
+              <textarea value={`sweatshirt 1\n24.99`} readOnly />
             </td>
-            <td>
+            <td id = "item" onClick={() => handleClick("sweatshirt 2")}>
               <img src={sweatshirt} alt="sweatshirt" width="100"/>
-              <input type="text" placeholder="sweatshirt 2" /></td>
-            <td>
+              <textarea value={`sweatshirt 2\n34.99`} readOnly />
+              </td>
+            <td id = "item" onClick={() => handleClick("sweatshirt 3")}>
               <img src={sweatshirt} alt="sweatshirt" width="100"/>
-              <input type="text" placeholder="sweatshirt 3" />
+              <textarea value={`sweatshirt 3 2\n39.99`} readOnly />
             </td>
           </tr>
         </tbody>
@@ -97,16 +115,18 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>
+            <td id = "item" onClick={() => handleClick("sweats 1")}>
               <img src={sweats} alt="sweats" width="100"/>
-              <input type="text" placeholder="sweats 1" />
+              <textarea value={`sweats 1\n19.99`} readOnly />
             </td>
-            <td>
+            <td id = "item" onClick={() => handleClick("sweats 2")}>
               <img src={sweats} alt="sweats" width="100"/>
-              <input type="text" placeholder="sweats 2" /></td>
-            <td>
+              <textarea value={`sweats 2\n23.99`} readOnly />
+              </td>
+            <td id = "item" onClick={() => handleClick("sweats 3")}>
               <img src={sweats} alt="sweats" width="100"/>
-              <input type="text" placeholder="sweats 3" /></td>
+              <textarea value={`sweats 3\n29.99`} readOnly />
+              </td>
           </tr>
         </tbody>
       </table>
@@ -118,22 +138,26 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td>
+            <td id = "item" onClick={() => handleClick("hat 1")}>
               <img src={hat} alt="hat" width="100"/>
-              <input type="text" placeholder="hat 1" /></td>
-            <td>
+              <textarea value={`hat 1\n9.99`} readOnly />
+              </td>
+            <td id = "item" onClick={() => handleClick("hat 2")}>
               <img src={hat} alt="hat" width="100"/>
-              <input type="text" placeholder="hat 2" /></td>
-            <td>
+              <textarea value={`hat 1\n12.99`} readOnly />
+              </td>
+            <td id = "item" onClick={() => handleClick("hat 3")}> 
               <img src={hat} alt="hat" width="100"/>
-              <input type="text" placeholder="hat 3" /></td>
+              <textarea value={`hat 1\n15.99`} readOnly />
+              </td>
           </tr>
         </tbody>
       </table>
     </div>
   );
 }
-// placeholder, this will become the form to create an account
+
+
 function CreateAccount() {
   const navigate = useNavigate(); //invoke library
   const [username, setUsername] = useState('');
@@ -248,6 +272,7 @@ function App() {
         <Route path="/create-account" element={<CreateAccount />} />
         <Route path="/login" element={<Login />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
       </Routes>
     </Router>
   );
