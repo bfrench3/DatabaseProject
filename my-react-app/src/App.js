@@ -29,20 +29,45 @@ function LoginButtons() {
   );
 }
 
+function OrderPlaced(){
+  const orderNo = 0; //make a global that gets incremented every time this page is reached and use ${orderNo}
+  //orderNo++;
+  return (
+    <div>
+      <h1>Congrats! order number ${orderNo} has been placed!</h1> 
+    </div>
+  );
+}
 
 
-
-
-/* ADD A CART PAGE */ 
 
 function Cart(){
   const location = useLocation();
-  const { altText } = location.state || {};
-
+  const navigate = useNavigate(); 
+  const { title, price, size, quantity } = location.state || {};
+  const total = price * quantity;
+  function handlePurchase(){
+    navigate("/orderplaced");
+  }
+  function continueShopping(){
+    navigate("/products");
+  }
   return (
     <div>
       <h1>Cart</h1>
-      {altText ? <p>Item: {altText}</p> : <p>No item selected</p>}
+      {title ? (
+        <div>
+          <p>Item: {title}</p>
+          <p>Price: ${price.toFixed(2)}</p>
+          <p>Size: {size}</p>
+          <p>Quantity: {quantity}</p>
+        </div>
+      ) : (
+        <p>No item selected</p>
+      )}
+      <h2>Total cost: {total} </h2>
+      <button id="continue" onClick={continueShopping}>Continue shopping</button>
+      <button id="order" onClick={handlePurchase}>Place order</button>
     </div>
   );
 }
@@ -51,11 +76,21 @@ function Cart(){
 
 function Products(){
   const navigate = useNavigate();
+  const [selectedSize, setSelectedSize] = useState({});
+  const [selectedQuantity, setSelectedQuantity] = useState({});
 
-  const handleClick = (alt) => {
+  const handleSizeChange = (id, size) => {
+    setSelectedSize(prev => ({ ...prev, [id]: size }));
+  };
 
-    // Pass the alt text as state when navigating
-    navigate("/cart", { state: { altText: alt } });
+  const handleQuantityChange = (id, quantity) => {
+    setSelectedQuantity(prev => ({ ...prev, [id]: quantity }));
+  };
+
+  const handleClick = (id, title, price) => {
+    const size = selectedSize[id] || 'S'; // Default size to M if not selected
+    const quantity = selectedQuantity[id] || 1; // Default quantity to 1 if not selected
+    navigate("/cart", { state: { title, price, size, quantity } });
   };
   return(
     <div>
@@ -68,18 +103,71 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td id = "item" onClick={() => handleClick("Shirt 1")}>
+          <td id="item">
               <img src={shirt1} alt="Shirt 1" width="100" />
               <textarea value={`Shirt 1\n19.99`} readOnly />
-
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('shirt1', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('shirt1', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('shirt1', 'Shirt 1', 19.99)}>Add to Cart</button>
             </td>
-            <td id = "item" onClick={() => handleClick("Shirt 2")}>
+            <td id="item">
               <img src={shirt1} alt="Shirt 2" width="100" />
               <textarea value={`Shirt 2\n24.99`} readOnly />
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('shirt2', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('shirt2', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('shirt2', 'Shirt 2', 24.99)}>Add to Cart</button>
             </td>
-            <td id = "item" onClick={() => handleClick("Shirt 3")}>
+            <td id="item">
               <img src={shirt1} alt="Shirt 3" width="100" />
               <textarea value={`Shirt 3\n29.99`} readOnly />
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('shirt3', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('shirt3', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('shirt3', 'Shirt 3', 29.99)}>Add to Cart</button>
             </td>
           </tr>
         </tbody>
@@ -92,17 +180,71 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td id = "item" onClick={() => handleClick("sweatshirt 1")}>
-              <img src={sweatshirt} alt="sweatshirt" width="100"/>
+          <td id="item">
+              <img src={sweatshirt} alt="sweatshirt 1" width="100" />
               <textarea value={`sweatshirt 1\n24.99`} readOnly />
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('sweatshirt1', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('sweatshirt1', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('sweatshirt1', 'sweatshirt1', 24.99)}>Add to Cart</button>
             </td>
-            <td id = "item" onClick={() => handleClick("sweatshirt 2")}>
-              <img src={sweatshirt} alt="sweatshirt" width="100"/>
+            <td id="item">
+              <img src={sweatshirt} alt="sweatshirt 2" width="100" />
               <textarea value={`sweatshirt 2\n34.99`} readOnly />
-              </td>
-            <td id = "item" onClick={() => handleClick("sweatshirt 3")}>
-              <img src={sweatshirt} alt="sweatshirt" width="100"/>
-              <textarea value={`sweatshirt 3 2\n39.99`} readOnly />
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('sweatshirt2', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('sweatshirt2', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('sweatshirt2', 'sweatshirt2', 34.99)}>Add to Cart</button>
+            </td>
+            <td id="item">
+              <img src={sweatshirt} alt="sweatshirt 3" width="100" />
+              <textarea value={`sweatshirt 3\n39.99`} readOnly />
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('sweatshirt3', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('sweatshirt3', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('sweatshirt3', 'sweatshirt3', 39.99)}>Add to Cart</button>
             </td>
           </tr>
         </tbody>
@@ -115,18 +257,72 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td id = "item" onClick={() => handleClick("sweats 1")}>
-              <img src={sweats} alt="sweats" width="100"/>
+          <td id="item">
+              <img src={sweats} alt="sweats 1" width="100" />
               <textarea value={`sweats 1\n19.99`} readOnly />
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('sweats1', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('sweats1', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('sweats1', 'sweats1', 19.99)}>Add to Cart</button>
             </td>
-            <td id = "item" onClick={() => handleClick("sweats 2")}>
-              <img src={sweats} alt="sweats" width="100"/>
+            <td id="item">
+              <img src={sweats} alt="sweats 2" width="100" />
               <textarea value={`sweats 2\n23.99`} readOnly />
-              </td>
-            <td id = "item" onClick={() => handleClick("sweats 3")}>
-              <img src={sweats} alt="sweats" width="100"/>
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('sweats2', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('sweats2', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('sweats2', 'sweats2', 23.99)}>Add to Cart</button>
+            </td>
+            <td id="item">
+              <img src={sweats} alt="sweats 3" width="100" />
               <textarea value={`sweats 3\n29.99`} readOnly />
-              </td>
+              <br />
+              <label>Size: </label>
+              <select onChange={(e) => handleSizeChange('sweats3', e.target.value)}>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <br />
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('sweats3', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('sweats3', 'sweats3', 29.99)}>Add to Cart</button>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -138,21 +334,26 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-            <td id = "item" onClick={() => handleClick("hat 1")}>
-              <img src={hat} alt="hat" width="100"/>
-              <textarea value={`hat 1\n9.99`} readOnly />
-              </td>
-            <td id = "item" onClick={() => handleClick("hat 2")}>
-              <img src={hat} alt="hat" width="100"/>
-              <textarea value={`hat 1\n12.99`} readOnly />
-              </td>
-            <td id = "item" onClick={() => handleClick("hat 3")}> 
-              <img src={hat} alt="hat" width="100"/>
-              <textarea value={`hat 1\n15.99`} readOnly />
-              </td>
+          <td id="item">
+              <img src={hat} alt="hat" width="100" />
+              <textarea value={`hat\n9.99`} readOnly />
+              <br />
+                
+             
+              <label>Quantity: </label>
+              <select onChange={(e) => handleQuantityChange('hat', e.target.value)}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <br />
+              <button onClick={() => handleClick('hat', 'hat', 9.99)}>Add to Cart</button>
+            </td>
           </tr>
         </tbody>
       </table>
+      <button id = "checkout">Checkout</button>
     </div>
   );
 }
@@ -273,6 +474,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/products" element={<Products />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/orderplaced" element={<OrderPlaced />} />
       </Routes>
     </Router>
   );

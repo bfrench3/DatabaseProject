@@ -4,6 +4,26 @@
 th {
   text-align: left;
 }
+td{
+  border: solid 1px black;
+}
+#item img {
+  display: block;
+  margin-bottom: 10px; /* Adds space between the image and the textarea */
+}
+#checkout{
+  display: block;
+  margin:auto;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+#item textarea {
+  display: block;
+  margin: left; /* Centers textarea and adds space below */
+  width: 100px; /* Optional: set a width to match the image size */
+}
+
 table {
   margin-left: auto;
   margin-right: auto;
@@ -37,4 +57,13 @@ table {
   display: flex;
   justify-content: center;
   align-content: center;
+}
+table {
+  width: 80%; /* Adjusts the width to take up 80% of the page width */
+  margin: 0 auto; /* Centers the table horizontally on the page */
+}
+
+td {
+  text-align: left; /* Centers the content inside each cell */
+  padding: 15px; /* Adds some padding to make the cells more spacious */
 }
