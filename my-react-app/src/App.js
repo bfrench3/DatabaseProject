@@ -1,3 +1,6 @@
+/* WHAT IS NEXT - ADD A SERVER FILE TO INTERACT WITH DATABASE, FOR LOGGING IN, CART STUFF AND CREATING AN ACCOUNT */
+
+
 import './App.css';
 import shirt1 from './shirt.jpg';
 import sweatshirt from './sweatshirt.jpg'
@@ -32,14 +35,18 @@ function LoginButtons() {
 function OrderPlaced(){
   const orderNo = 0; //make a global that gets incremented every time this page is reached and use ${orderNo}
   //orderNo++;
+  const navigate = useNavigate(); 
+  function continueShopping(){
+    navigate("/products");
+  }
   return (
     <div>
       <h1>Congrats! order number ${orderNo} has been placed!</h1> 
+      
+      <button id="continue" onClick={continueShopping}>Continue shopping</button>
     </div>
   );
 }
-
-
 
 function Cart(){
   const location = useLocation();
@@ -87,6 +94,9 @@ function Products(){
     setSelectedQuantity(prev => ({ ...prev, [id]: quantity }));
   };
 
+  function placeOrder(){
+    navigate("/orderplaced");
+  }
   const handleClick = (id, title, price) => {
     const size = selectedSize[id] || 'S'; // Default size to M if not selected
     const quantity = selectedQuantity[id] || 1; // Default quantity to 1 if not selected
@@ -353,7 +363,7 @@ function Products(){
           </tr>
         </tbody>
       </table>
-      <button id = "checkout">Checkout</button>
+      <button id = "placeOrder" onClick={placeOrder}>Place Order</button>
     </div>
   );
 }
@@ -365,12 +375,18 @@ function CreateAccount() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
+  const [cardNo, setCardNo] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [exp, setExp] = useState('');
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log('Username: ', username);
     console.log('Password: ', password);
     console.log('Email: ', email);
     console.log('address: ', address);
+    console.log('card no: ', cardNo);
+    console.log('cvv: ', cvv);
+    console.log('exp: ', exp);
     navigate("/products");
   };
 
@@ -407,6 +423,30 @@ function CreateAccount() {
               type = "text" 
               value={password}
               onChange={(e) => setPassword(e.target.value)} />
+          </label>
+        </div>
+        <div className="form-group">
+          <label className="form-label"> Enter card #
+            <input 
+              type="text"
+              value={cardNo}
+              onChange={(e) => setCardNo(e.target.value)} />
+          </label>
+        </div>
+        <div className="form-group">
+          <label className="form-label"> Enter cvv #
+            <input 
+              type="text"
+              value={cvv}
+              onChange={(e) => setCvv(e.target.value)} />
+          </label>
+        </div>
+        <div className="form-group">
+          <label className="form-label"> Enter exp date
+            <input 
+              type="text"
+              value={exp}
+              onChange={(e) => setExp(e.target.value)} />
           </label>
         </div>
         <input type="submit" id="submitButton" value = "create" />

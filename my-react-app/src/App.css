@@ -11,7 +11,7 @@ td{
   display: block;
   margin-bottom: 10px; /* Adds space between the image and the textarea */
 }
-#checkout{
+#placeOrder{
   display: block;
   margin:auto;
   padding: 15px;
