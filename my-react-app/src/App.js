@@ -459,11 +459,27 @@ function Login(){
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const handleSubmit = (event) => {
+  const [error, setError] = useState('');
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Username:', username);
-    console.log('Password:', password);
-    navigate("/products");
+    try {
+      const response = await fetch('http://localhost:5005/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        // Assuming successful login redirects to products page
+        navigate("/products");
+      } else {
+        setError(data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An error occurred during login.');
+    }
   };
   
   return (
@@ -489,7 +505,7 @@ function Login(){
         </div>
         <input type="submit" id="submitButton" value = "Login"/>
       </form>
-   
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
