@@ -1,4 +1,4 @@
-/* WHAT IS NEXT - ADD A SERVER FILE TO INTERACT WITH DATABASE, FOR LOGGING IN, CART STUFF AND CREATING AN ACCOUNT */
+// NEXT STEPS: CHECK AGAINST DATABASE FOR CART ITEMS, CREATING AN ACCOUNT AND ORDER PLACED
 
 
 import './App.css';
@@ -19,7 +19,7 @@ function LoginButtons() {
   function handleClickCreate() {
     navigate("/create-account"); // navigates in the url to localhost:3000/create-account
   }
-  function handleClickLogin(){
+  function handleClickLogin() {
     navigate("/login"); //navigates to login form
   }
 
@@ -32,31 +32,31 @@ function LoginButtons() {
   );
 }
 
-function OrderPlaced(){
+function OrderPlaced() {
   const orderNo = 0; //make a global that gets incremented every time this page is reached and use ${orderNo}
   //orderNo++;
-  const navigate = useNavigate(); 
-  function continueShopping(){
+  const navigate = useNavigate();
+  function continueShopping() {
     navigate("/products");
   }
   return (
     <div>
-      <h1>Congrats! order number ${orderNo} has been placed!</h1> 
-      
+      <h1>Congrats! order number ${orderNo} has been placed!</h1>
+
       <button id="continue" onClick={continueShopping}>Continue shopping</button>
     </div>
   );
 }
 
-function Cart(){
+function Cart() {
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const { title, price, size, quantity } = location.state || {};
   const total = price * quantity;
-  function handlePurchase(){
+  function handlePurchase() {
     navigate("/orderplaced");
   }
-  function continueShopping(){
+  function continueShopping() {
     navigate("/products");
   }
   return (
@@ -79,9 +79,7 @@ function Cart(){
   );
 }
 
-
-
-function Products(){
+function Products() {
   const navigate = useNavigate();
   const [selectedSize, setSelectedSize] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState({});
@@ -94,7 +92,7 @@ function Products(){
     setSelectedQuantity(prev => ({ ...prev, [id]: quantity }));
   };
 
-  function placeOrder(){
+  function placeOrder() {
     navigate("/orderplaced");
   }
   const handleClick = (id, title, price) => {
@@ -102,7 +100,7 @@ function Products(){
     const quantity = selectedQuantity[id] || 1; // Default quantity to 1 if not selected
     navigate("/cart", { state: { title, price, size, quantity } });
   };
-  return(
+  return (
     <div>
       <h1 id="title">Impact Strength Club Merchandise Site</h1>
       <table>
@@ -113,7 +111,7 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-          <td id="item">
+            <td id="item">
               <img src={shirt1} alt="Shirt 1" width="100" />
               <textarea value={`Shirt 1\n19.99`} readOnly />
               <br />
@@ -190,7 +188,7 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-          <td id="item">
+            <td id="item">
               <img src={sweatshirt} alt="sweatshirt 1" width="100" />
               <textarea value={`sweatshirt 1\n24.99`} readOnly />
               <br />
@@ -267,7 +265,7 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-          <td id="item">
+            <td id="item">
               <img src={sweats} alt="sweats 1" width="100" />
               <textarea value={`sweats 1\n19.99`} readOnly />
               <br />
@@ -344,12 +342,12 @@ function Products(){
         </thead>
         <tbody>
           <tr>
-          <td id="item">
+            <td id="item">
               <img src={hat} alt="hat" width="100" />
               <textarea value={`hat\n9.99`} readOnly />
               <br />
-                
-             
+
+
               <label>Quantity: </label>
               <select onChange={(e) => handleQuantityChange('hat', e.target.value)}>
                 <option value="1">1</option>
@@ -363,11 +361,10 @@ function Products(){
           </tr>
         </tbody>
       </table>
-      <button id = "placeOrder" onClick={placeOrder}>Place Order</button>
+      <button id="placeOrder" onClick={placeOrder}>Place Order</button>
     </div>
   );
 }
-
 
 function CreateAccount() {
   const navigate = useNavigate(); //invoke library
@@ -375,42 +372,57 @@ function CreateAccount() {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const [cardNo, setCardNo] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
   const [cvv, setCvv] = useState('');
   const [exp, setExp] = useState('');
-  const handleSubmit = (event) => {
+  const [error, setError] = useState('');
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log('Username: ', username);
-    console.log('Password: ', password);
-    console.log('Email: ', email);
-    console.log('address: ', address);
-    console.log('card no: ', cardNo);
-    console.log('cvv: ', cvv);
-    console.log('exp: ', exp);
-    navigate("/products");
+    try {
+      const response = await fetch('http://localhost:5005/api/create', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, cardNumber }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        console.error('Error Response:', data); // Log the error response
+        setError(data.message || 'User creation failed');
+      } else {
+        navigate("/login");
+      }
+
+    } catch (error) {
+
+      console.error('Error:', error);
+      setError('An error occurred during user creation.');
+    }
   };
+
+
 
   return (
     <div>
-      <h2 id = "title">Create Your Account</h2>
+      <h2 id="title">Create Your Account</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className = "form-label">Enter your email: 
-            <input type="text" 
+          <label className="form-label">Enter your email:
+            <input type="text"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}/>
+              onChange={(e) => setEmail(e.target.value)} />
           </label>
         </div>
         <div className="form-group">
-          <label className = "form-label">Shipping Address: 
-            <input 
-              type = "text"
-              value ={address}
+          <label className="form-label">Shipping Address:
+            <input
+              type="text"
+              value={address}
               onChange={(e) => setAddress(e.target.value)} />
           </label>
         </div>
         <div className="form-group">
-          <label className = "form-label">Enter a username:
+          <label className="form-label">Enter a username:
             <input
               type="text"
               value={username}
@@ -418,24 +430,24 @@ function CreateAccount() {
           </label>
         </div>
         <div className="form-group">
-          <label className = "form-label"> Enter a password: 
-            <input 
-              type = "text" 
+          <label className="form-label"> Enter a password:
+            <input
+              type="text"
               value={password}
               onChange={(e) => setPassword(e.target.value)} />
           </label>
         </div>
         <div className="form-group">
           <label className="form-label"> Enter card #
-            <input 
+            <input
               type="text"
-              value={cardNo}
-              onChange={(e) => setCardNo(e.target.value)} />
+              value={cardNumber}
+              onChange={(e) => setCardNumber(e.target.value)} />
           </label>
         </div>
         <div className="form-group">
           <label className="form-label"> Enter cvv #
-            <input 
+            <input
               type="text"
               value={cvv}
               onChange={(e) => setCvv(e.target.value)} />
@@ -443,19 +455,20 @@ function CreateAccount() {
         </div>
         <div className="form-group">
           <label className="form-label"> Enter exp date
-            <input 
+            <input
               type="text"
               value={exp}
               onChange={(e) => setExp(e.target.value)} />
           </label>
         </div>
-        <input type="submit" id="submitButton" value = "create" />
+        <input type="submit" id="submitButton" value="create" />
       </form>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
-
-function Login(){
+//login page, SUCCESSFULLY CHECKS AGAINST MYSQL
+function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -481,36 +494,36 @@ function Login(){
       setError('An error occurred during login.');
     }
   };
-  
+
   return (
     <div>
       <h2 id="title">Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label">Username: 
-            <input 
-              type="text" 
-              value={username} 
+          <label className="form-label">Username:
+            <input
+              type="text"
+              value={username}
               onChange={(e) => setUsername(e.target.value)} />
           </label>
         </div>
         <div className="form-group">
-          <label className="form-label">Password: 
-            <input 
-              type = "text"
+          <label className="form-label">Password:
+            <input
+              type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} 
+              onChange={(e) => setPassword(e.target.value)}
             />
           </label>
         </div>
-        <input type="submit" id="submitButton" value = "Login"/>
+        <input type="submit" id="submitButton" value="Login" />
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </div>
   );
 }
 
-// Home Component
+// landing page
 function Home() {
   return (
     <div>
@@ -520,7 +533,7 @@ function Home() {
   );
 }
 
-// App Component
+// parent of all, has routes etc.
 function App() {
   return (
     <Router>

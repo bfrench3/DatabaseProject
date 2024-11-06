@@ -27,11 +27,11 @@ db.connect((err) => {
 
 app.get('/products', (req, res) => {
   db.query('SELECT * FROM product', (err, results) => {
-      if (err) {
-          console.error('Database query error:', err); // Log the error
-          return res.status(500).send('Error fetching data');
-      }
-      res.json(results); // Send data as JSON if successful
+    if (err) {
+      console.error('Database query error:', err); // Log the error
+      return res.status(500).send('Error fetching data');
+    }
+    res.json(results); // Send data as JSON if successful
   });
 });
 
@@ -50,7 +50,43 @@ app.post('/api/login', async (req, res) => {
   });
 });
 
+//ERRORS IN CREATING USERS
 
+app.put('/api/create', async (req, res) => {
+  const { username, password, cardNumber } = req.body;
+  const sql = 'INSERT INTO Users (username, password, cardNumber) VALUES (?, ?, ?)';
+
+  try {
+    // Attempt to insert into the Payment table
+    await db.execute('INSERT INTO Payment (cardNumber) VALUES (?)', [cardNumber]);
+
+    console.log('Attempting to create user with:', { username, password, cardNumber }); // Log input data
+    const result = await db.execute(sql, [username, password, cardNumber]);
+
+    console.log('DB execute result:', result); // Log the complete result
+
+    if (result && typeof result === 'object' && 'affectedRows' in result) {
+      if (result.affectedRows > 0) {
+        return res.status(201).json({ message: 'User created successfully' });
+      }
+    }
+
+    // Handle case where no rows were affected
+    //res.status(400).json({ message: 'User creation failed' });
+
+  } catch (error) {
+    // Ignore specific error types you want to bypass
+    if (error.message.includes('some specific message or error code')) {
+      // If you want to ignore this error, do nothing
+      console.log('Ignored error:', error.message);
+      return; // Exit the function early if you want to ignore the error
+    }
+
+    // For all other errors, log them and send a response
+    console.error('Database error:', error); // Log the error stack
+    res.status(500).json({ message: 'Database error', error: error.message });
+  }
+});
 
 
 
