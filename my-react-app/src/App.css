@@ -1,69 +1,222 @@
-#title{
-  text-align: center;  
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  padding: 20px;
+}
+
+/* Cart Page */
+#cart-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#cart-title {
+  text-align: center;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #2d3a3a;
+}
+
+.cart-item {
+  padding: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-title,
+.cart-item-price,
+.cart-item-size,
+.cart-item-quantity {
+  font-size: 1.1em;
+  margin: 5px 0;
+}
+
+.cart-item-title strong {
+  color: #4CAF50;
+}
+
+#total-cost {
+  font-size: 1.5em;
+  margin-top: 20px;
+  color: #4CAF50;
+}
+
+#empty-cart-message {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #888;
+  margin-top: 20px;
+}
+
+/* Button Styles */
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  display: inline-block;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+button#continue {
+  background-color: #007bff;
+}
+
+button#continue:hover {
+  background-color: #0056b3;
+}
+
+button#order {
+  background-color: #ff9800;
+}
+
+button#order:hover {
+  background-color: #e68900;
+}
+
+button#clear-cart {
+  background-color: #f44336;
+}
+
+button#clear-cart:hover {
+  background-color: #d32f2f;
+}
+
+/* Table and Forms */
+table {
+  width: 80%;
+  margin: 0 auto;
+  border: solid 1px black;
+}
+
 th {
   text-align: left;
 }
-td{
+
+td {
+  text-align: left;
+  padding: 15px;
   border: solid 1px black;
 }
+
 #item img {
   display: block;
-  margin-bottom: 10px; /* Adds space between the image and the textarea */
-}
-#placeOrder{
-  display: block;
-  margin:auto;
-  padding: 15px;
-  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 #item textarea {
   display: block;
-  margin: left; /* Centers textarea and adds space below */
-  width: 100px; /* Optional: set a width to match the image size */
+  width: 100px;
+  margin-top: 5px;
 }
 
-table {
-  margin-left: auto;
-  margin-right: auto;
-  border: solid 1px black;
+#placeOrder {
+  display: block;
+  margin: auto;
+  padding: 15px;
+  margin-top: 15px;
 }
-#create-account{
+
+#title {
   text-align: center;
-  padding: 10px;
-  margin: 10px;
 }
-#login{
-  text-align: center;
-  padding: 10px;
-  margin: 10px;
-}
-#buttons{
+
+#buttons {
   display: flex;
   justify-content: center;
   align-content: center;
 }
-.form-label{
+
+#buttons button {
+  margin: 0 10px;
+}
+
+/* Form Elements */
+.form-label {
   display: block;
   margin: 10px;
 }
-.form-label input{
+
+.form-label input {
   display: block;
   margin-top: 5px;
-  width:50%;
+  width: 50%;
 }
-#submitButton{
+
+#submitButton {
   display: flex;
   justify-content: center;
   align-content: center;
 }
-table {
-  width: 80%; /* Adjusts the width to take up 80% of the page width */
-  margin: 0 auto; /* Centers the table horizontally on the page */
+
+#login,
+#create-account {
+  text-align: center;
+  padding: 10px;
+  margin: 10px;
 }
 
-td {
-  text-align: left; /* Centers the content inside each cell */
-  padding: 15px; /* Adds some padding to make the cells more spacious */
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  #cart-container {
+    padding: 15px;
+  }
+
+  #cart-title {
+    font-size: 2em;
+  }
+
+  #total-cost {
+    font-size: 1.3em;
+  }
+
+  button {
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  .cart-item-title,
+  .cart-item-price,
+  .cart-item-size,
+  .cart-item-quantity {
+    font-size: 1em;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  td {
+    padding: 10px;
+  }
 }
