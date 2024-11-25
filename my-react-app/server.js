@@ -10,12 +10,9 @@ app.use(cors({
   origin: 'http://localhost:3000', // Allow your frontend
   credentials: true // Allow cookies to be sent along with requests
 }));
-
 // Body parser setup
 app.use(express.json()); // Parse JSON requests
-
 const session = require('express-session');
-
 // Database connection
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
@@ -24,7 +21,6 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
   connectTimeout: 10000 // 10 seconds
 });
-
 // Session setup
 app.use(session({
   secret: 'yourSecretKey', // Replace with a strong secret key
@@ -34,8 +30,6 @@ app.use(session({
     secure: false, // Set to true if using https, false for http
   },
 }));
-
-
 db.connect((err) => {
   if (err) {
     console.error('Error connecting to MySQL:', err);
@@ -44,6 +38,7 @@ db.connect((err) => {
   }
 });
 
+//gets from the http://localhost:5005/api/products 
 app.get('/products', (req, res) => {
   db.query('SELECT * FROM product', (err, results) => {
     if (err) {
@@ -54,15 +49,16 @@ app.get('/products', (req, res) => {
   });
 });
 
+//gets data to http://localhost:5005/api/login
 app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
-  const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+  const { username, password } = req.body; //this is the body of the json that was uploaded to the server. the front end sent the login info to this endpoint
+  const query = 'SELECT * FROM users WHERE username = ? AND password = ?'; //write the query using that info
 
   db.query(query, [username, password], (err, results) => {
     if (err) {
-      return res.status(500).json({ message: 'Database error', error: err });
+      return res.status(500).json({ message: 'Database error', error: err }); //for debugging
     }
-    if (results.length > 0) {
+    if (results.length > 0) { //if data was sent
       req.session.user = { username };
       res.json({ message: 'Login successful' });
     } else {
@@ -70,6 +66,7 @@ app.post('/api/login', async (req, res) => {
     }
   });
 });
+
 
 app.put('/api/create', async (req, res) => {
   //req body is what has been received from json
@@ -97,15 +94,14 @@ app.put('/api/create', async (req, res) => {
 });
 
 app.post('/api/cart', async (req, res) => {
-  const { username, product_id, quantity, price, size, title } = req.body;
-
+  const { username, product_id, quantity, price, size, title } = req.body; //access the body that was uploaded to the endpoint
   const query = `
       INSERT INTO \`order\` (username, product_id, quantity, price, size, status, added_to_cart_at, title)
       VALUES (?, ?, ?, ?, ?, 'cart', NOW(), ?)
-  `;
+  `; //query using it
 
   try {
-    await db.execute(query, [username, product_id, quantity, price, size, title]);
+    await db.execute(query, [username, product_id, quantity, price, size, title]); //execute the query in mysql
     res.status(200).json({ message: 'Item successfully added to cart' });
   } catch (error) {
     console.error('Error adding item to cart:', error);
@@ -113,19 +109,14 @@ app.post('/api/cart', async (req, res) => {
   }
 });
 
-//
-
-
-
-// Assuming you're using Express
 app.delete('/api/cart/clear', async (req, res) => {
-  const { username } = req.query;  // Get username from query parameter
+  const { username } = req.query;  //gets our username that was sent over
   if (!username) {
     return res.status(400).json({ message: 'Username is required' });
   }
   try {
-    const query = 'DELETE FROM `order` WHERE username = ? AND status = "cart"';
-    const [result] = await db.promise().execute(query, [username]);
+    const query = 'DELETE FROM `order` WHERE username = ? AND status = "cart"'; //query using the username that was sent
+    const [result] = await db.promise().execute(query, [username]); //execute in mysql
     if (result.affectedRows > 0) {
       res.status(200).json({ message: 'Cart cleared successfully' });
     } else {
@@ -137,7 +128,7 @@ app.delete('/api/cart/clear', async (req, res) => {
   }
 });
 
-
+/* NOT NEEDED
 app.get('/api/cart/:username', async (req, res) => {
   const { username } = req.params;
   if (!username) {
@@ -152,7 +143,7 @@ app.get('/api/cart/:username', async (req, res) => {
     res.status(500).json({ message: 'Database error', error: error.message });
   }
 });
-
+*/
 
 
 
@@ -162,7 +153,6 @@ app.get('/api/cart/:username', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
 console.log('DB_HOST:', process.env.DB_HOST);
 console.log('DB_USER:', process.env.DB_USER);
 console.log('DB_PASSWORD:', process.env.DB_PASSWORD);

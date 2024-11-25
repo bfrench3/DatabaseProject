@@ -1,15 +1,13 @@
 // NEXT STEPS: CHECK AGAINST DATABASE FOR CART ITEMS, CREATING AN ACCOUNT AND ORDER PLACED
 import './App.css';
 import shirt1 from './shirt.jpg';
-import sweatshirt from './sweatshirt.jpg'
-import sweats from './sweats.jpg'
-import hat from './hat.webp'
+import sweatshirt from './sweatshirt.jpg';
+import sweats from './sweats.jpg';
+import hat from './hat.webp';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 //second import uses navigation to change pages
 import React, { useEffect, useState } from 'react';
 
-//third import for extracting data
-import { useLocation } from 'react-router-dom';
 
 //function for both buttons, either create or login
 function LoginButtons() {
@@ -47,46 +45,44 @@ function OrderPlaced() {
     </div>
   );
 }
-//not working
+//working
 function Cart() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([]);
   const [totalCost, setTotalCost] = useState(0);
-  const username = localStorage.getItem('username');
-
-  // Fetch cart items for the logged-in user
-  const fetchCartItems = async () => {
+  const username = localStorage.getItem('username'); //username is stored locally, easiest way to pull it.
+  //
+  const fetchCartItems = async () => { //when navigated to this page, this method is invoked that fetches all items in this users cart, in this session
     try {
-      const response = await fetch(`http://localhost:5005/api/cart/${username}`, {
+      const response = await fetch(`http://localhost:5005/api/cart/${username}`, { //gets from this endpoint
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-      const data = await response.json();
-      console.log(data); // Check the response
-      if (Array.isArray(data) && data.length > 0) {
+      const data = await response.json(); //data is what we got from that endpoint
+      console.log(data); // log the data for debugging
+      if (Array.isArray(data) && data.length > 0) { //checks that there are items in the cart, so that they get set as those items
         setCartItems(data);
       } else {
-        console.log("No items in cart");
+        console.log("No items in cart"); //if nothing in the cart, display this
       }
     } catch (error) {
       console.error("Error fetching cart items:", error);
     }
   };
-
-  // Calculate total cost whenever cartItems changes
+  //this formats the total cost correctly
   useEffect(() => {
     const total = cartItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
     setTotalCost(total);
   }, [cartItems]);
 
-  // Fetch the cart items when the component mounts
+  //fetch when component mounts (loads)
   useEffect(() => {
     if (username) {
       fetchCartItems(username);
     } else {
       console.log('User not logged in');
-      // Redirect to login if user is not logged in
-      navigate('/login');
+      // if cant find username for some reason (this should never happen)
+      navigate('/login'); //if it did, navigate to login
     }
   }, [username, navigate]);
 
@@ -99,29 +95,27 @@ function Cart() {
   }
 
   const handleClearCart = async () => {
-    // Retrieve the username from localStorage (assuming it's stored as 'username')
+    //get the username from local storage
     const username = localStorage.getItem('username');
-
     if (!username) {
       console.error('No user logged in');
-      return; // Optionally handle the case when no username is found
+      return;
     }
-
-    try {
+    try { //go to this endpoint, and DELETE
       const response = await fetch(`http://localhost:5005/api/cart/clear?username=${username}`, {
         method: 'DELETE',
       });
-
       if (!response.ok) {
         throw new Error('Failed to clear cart');
       }
-      const result = await response.json();
-      setCartItems([]);
-      console.log(result.message); // Log response message or update state accordingly
+      const result = await response.json(); //get the data from the delete call at the endpoint
+      setCartItems([]); //set cart to empty
+      console.log(result.message);
     } catch (error) {
       console.error('Error clearing cart:', error);
     }
   };
+  //heres the react for the cart component
   return (
     <div id="cart-container">
       <h1 id="cart-title">Your Cart</h1>
@@ -161,73 +155,49 @@ function Products() {
   const navigate = useNavigate();
   const [selectedSize, setSelectedSize] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState({});
-  const [product_ID, setproduct_ID] = useState({});
+  //these selecteds are for the components that dont hold a value, but they are selects
 
-
+  //get the values from the selections
   const handleSizeChange = (id, size) => {
     setSelectedSize(prev => ({ ...prev, [id]: size }));
   };
-
   const handleQuantityChange = (id, quantity) => {
     setSelectedQuantity(prev => ({ ...prev, [id]: quantity }));
   };
-
   function placeOrder() {
     navigate("/orderplaced");
   }
-
-  /*
-  async function fetchUsername() {
-    try {
-      const response = await fetch('/api/current_user');
-      const text = await response.text(); // Get the response as text first
-      console.log('Raw response:', text); // Log the raw response to see what's coming back
-
-      if (response.ok) {
-        const data = JSON.parse(text); // Only parse it as JSON if the response is valid
-        return data.username;
-      } else {
-        throw new Error('Failed to fetch user');
-      }
-    } catch (error) {
-      console.error('Error fetching username:', error);
-      return null;
-    }
-  }
-
-*/
-
+  //gets invoked upon an item getting added to cart
   const handleClick = async (id, title, price) => {
-    const size = selectedSize[id] || 'S'; // Default size to 'S' if not selected
-    const quantity = selectedQuantity[id] || 1; // Default quantity to 1 if not selected
-
+    const size = selectedSize[id] || 'S'; // Default size to 'S' if not changed
+    const quantity = selectedQuantity[id] || 1; // Default quantity to 1 if not changed
+    //log the item components
     console.log('Sending item to cart with: ', { id, title, price, size, quantity });
-
     try {
-      const username = localStorage.getItem('username');
-      if (username) {
+      const username = localStorage.getItem('username'); //get username from local
+      if (username) { //need the username to send the rest of the data
         const body = {
           username,
           product_id: id,
           quantity,
           price,
           size,
-          title, // Ensure title is being passed here
+          title, //heres all the facets of the product you selected
         };
-
+        //this if makes sure we have everything from our req body
         if (body.username && body.product_id && body.quantity && body.price && body.size && body.title) {
-          const response = await fetch('http://localhost:5005/api/cart', {
+          const response = await fetch('http://localhost:5005/api/cart', { //this sends this product to cart, response is the confirmation 200
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(body),
+            body: JSON.stringify(body), //de json the info
           });
-
+          //
           if (response.ok) {
             const result = await response.json();
-            console.log(result.message); // Successfully added to cart
-            navigate("/cart"); // Navigate to cart page
+            console.log(result.message); //added to order
+            navigate("/cart"); // Navigate to cart page to see new item in cart
           } else {
             const error = await response.json();
             console.error(error.message); // Error adding to cart
@@ -242,11 +212,7 @@ function Products() {
       console.error('Error adding item to cart:', error);
     }
   };
-
-
-
-
-
+  //products html section
   return (
     <div>
       <h1 id="title">Impact Strength Club Merchandise Site</h1>
