@@ -38,7 +38,7 @@ db.connect((err) => {
   }
 });
 
-//gets from the http://localhost:5005/api/products 
+//gets from the http://localhost:5005/api/products, we dont use but good for dynamically loading products in future
 app.get('/products', (req, res) => {
   db.query('SELECT * FROM product', (err, results) => {
     if (err) {
@@ -108,6 +108,40 @@ app.post('/api/cart', async (req, res) => {
     res.status(500).json({ message: 'Failed to add item to cart' });
   }
 });
+/*
+app.post('/api/cart/orderNo', async (req, res) => {
+  const { username } = req.body;
+
+  const query = 'SELECT orderID FROM \`order\` WHERE username = ? ORDER BY added_to_cart_at DESC LIMIT 1;';
+
+  try {
+    // Execute the query
+    const result = await db.execute(query, [username]);
+    console.log('Query Result:', result);
+
+    // Access the rows (result[0] contains the actual data)
+    const rows = result[0];  // result[0] is the rows array
+    console.log(rows);
+    // Check if rows is an array and has at least one element
+    /*
+    if (Array.isArray(rows) && rows.length > 0) {
+      const orderNo = rows[0].orderID;  // Access the first row's orderID
+      console.log('Order Number:', orderNo);
+      // You can then return or use the order number as needed
+    } else {
+      console.log('No order found for user:', username);
+      // Handle the case where no order was found for the given username
+    }
+
+
+  } catch (error) {
+    console.error('Error fetching order number:', error);
+    res.status(500).json({ error: 'Unexpected server error' });
+  }
+});
+
+*/
+
 
 app.delete('/api/cart/clear', async (req, res) => {
   const { username } = req.query;  //gets our username that was sent over
@@ -128,7 +162,7 @@ app.delete('/api/cart/clear', async (req, res) => {
   }
 });
 
-/* NOT NEEDED
+
 app.get('/api/cart/:username', async (req, res) => {
   const { username } = req.params;
   if (!username) {
@@ -143,7 +177,7 @@ app.get('/api/cart/:username', async (req, res) => {
     res.status(500).json({ message: 'Database error', error: error.message });
   }
 });
-*/
+
 
 
 
@@ -155,5 +189,5 @@ app.listen(PORT, () => {
 });
 console.log('DB_HOST:', process.env.DB_HOST);
 console.log('DB_USER:', process.env.DB_USER);
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+//console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 console.log('DB_NAME:', process.env.DB_NAME); 

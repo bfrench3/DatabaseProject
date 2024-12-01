@@ -29,22 +29,72 @@ function LoginButtons() {
   );
 }
 
+
 function OrderPlaced() {
-  const orderNo = 0; //make a global that gets incremented every time this page is reached and use ${orderNo}
-  //orderNo++;
+  const [orderNo, setOrderNo] = useState(0); // State to store the order number
   const navigate = useNavigate();
+  const username = localStorage.getItem('username'); // Retrieve username from localStorage
+
+  /*
+  const fetchOrderNo = async () => {
+    try {
+      if (!username) {
+        console.error('No username found in localStorage');
+        return;
+      }
+
+      const response = await fetch('http://localhost:5005/api/cart/orderNo', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username }),
+      });
+
+      console.log('Response Status:', response.status); // Log the response status
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch order number: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Response Data:', data);
+
+      if (data && data.orderNo) {
+        setOrderNo(data.orderNo); // Store order number in state
+        console.log('Order Number:', data.orderNo);
+      } else {
+        console.error('Order number not found in response');
+      }
+    } catch (error) {
+      console.error('Error fetching order number:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (username) {
+      fetchOrderNo();
+    } else {
+      console.log('User not logged in');
+      navigate('/login');
+    }
+  }, [username, navigate]);
+*/
   function continueShopping() {
-    navigate("/products");
+    navigate('/products');
   }
 
   return (
     <div>
-      <h1>Congrats! order number ${orderNo} has been placed!</h1>
 
+      <h1>Congrats! your order has been placed!</h1>
       <button id="continue" onClick={continueShopping}>Continue shopping</button>
     </div>
   );
 }
+
+
+
 //working
 function Cart() {
   const navigate = useNavigate();
@@ -87,7 +137,14 @@ function Cart() {
   }, [username, navigate]);
 
   function handlePurchase() {
-    navigate("/orderplaced");
+    if (cartItems.length === 0) {
+      alert("There's nothing in your cart!");
+    }
+    else {
+      //handleClearCart();
+      navigate("/orderplaced");
+    }
+
   }
 
   function continueShopping() {
